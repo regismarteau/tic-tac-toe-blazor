@@ -1,0 +1,20 @@
+:root {
+    --player-color: #0E49B5;
+    --computer-color: #ED0101;
+}
+
+html, body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: #333;
+}
+
+button {
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 5px;
+}

@@ -1,0 +1,54 @@
+﻿@using Domain.DomainEvents
+@using Queries
+@using UseCases.Commands
+@using Web.Extensions
+@inherits DispatcherComponent
+@implements IRefreshComponentOn<CellMarked>
+
+<div class="tic-tac-toe-container">
+    @foreach (var cell in Enum.GetValues<CellDto>())
+    {
+        <Cell Symbol="currentGame?.Marks.FirstOrDefault(m => m.Cell == cell)?.Symbol" Selected="() => SelectCell(cell)" />
+    }
+</div>
+
+@if(currentGame?.Result is ResultDto.Draw)
+{
+    <div class="floating">
+        <span>Draw :/</span>
+        <button @onclick="ResetGame">Retry</button>
+    </div>
+}
+else if (currentGame?.Result is ResultDto.WonByPlayerO)
+{
+    <div class="floating">
+        <span>You loose :(</span>
+        <button @onclick="ResetGame">Retry</button>
+    </div>
+}
+@code {
+    [Parameter, EditorRequired]
+    public Guid GameId { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback GameResetted { get; set; }
+
+    private GameDto? currentGame { get; set; }
+
+    private async Task SelectCell(CellDto cell)
+    {
+        await Dispatch(new Play(new(GameId), cell.ToDomain()));
+    }
+
+    public async Task Refresh(CellMarked @event)
+    {
+        currentGame = await Dispatch(new GetGameState(GameId));
+        await StateHasChangedAsync();
+    }
+
+    private void ResetGame()
+    {
+        this.currentGame = null;
+        GameResetted.InvokeAsync();
+    }
+}

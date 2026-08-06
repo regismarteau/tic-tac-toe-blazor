@@ -1,0 +1,25 @@
+﻿@page "/"
+@using UseCases.Commands
+@rendermode InteractiveServer
+@inherits DispatcherComponent
+
+<PageTitle>Unbeatable Tic Tac Toe</PageTitle>
+
+@if (gameId is null)
+{
+    <h1>Unbeatable Tic Tac Toe!</h1>
+    <button @onclick="StartNewGame">Start!</button>
+}
+else {
+    <TicTacToe GameId="gameId.Value" GameResetted="StartNewGame" />
+}
+
+
+@code {
+    private Guid? gameId { get; set; }
+
+    private async Task StartNewGame() {
+        this.gameId = await Dispatch(new StartAGame());
+        await StateHasChangedAsync();
+    }
+}

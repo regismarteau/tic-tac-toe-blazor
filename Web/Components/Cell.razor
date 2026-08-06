@@ -1,0 +1,27 @@
+﻿@using Queries
+<div 
+    class="cell-container @(Symbol is SymbolDto.Cross ? "cross" : Symbol is SymbolDto.Nought ? "nought" : "")" 
+    @onclick="Select">
+    @(Symbol is null ? Empty : Symbol is SymbolDto.Cross ? Cross : Nought)
+</div>
+
+@code {
+    [Parameter]
+    public SymbolDto? Symbol { get; set; }
+    [Parameter, EditorRequired] 
+    public EventCallback Selected { get; set; }
+
+    private MarkupString Empty => ((MarkupString)"&nbsp;");
+
+    private MarkupString Cross => ((MarkupString)"&#128940;");
+
+    private MarkupString Nought => ((MarkupString)"&#128902;");
+
+    private async Task Select()
+    {
+        if(Symbol is null)
+        {
+            await Selected.InvokeAsync();
+        }
+    }
+}

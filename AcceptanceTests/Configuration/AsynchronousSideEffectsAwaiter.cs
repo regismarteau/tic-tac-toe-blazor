@@ -1,18 +1,13 @@
-﻿using Database;
-using Microsoft.EntityFrameworkCore;
+﻿using Infrastructure.OutboxServices;
+using Reqnroll;
 
 namespace AcceptanceTests.Configuration;
 
-public class AsynchronousSideEffectsAwaiter(TicTacToeDbContext dbContext)
+public class AsynchronousSideEffectsAwaiter(ScenarioContext context)
 {
     public async Task WaitForSideEffects()
     {
-        var isThereAnyEventsToHandle = true;
-        do
-        {
-            isThereAnyEventsToHandle = await dbContext.Outbox.AnyAsync();
-            await Task.Delay(10);
-        }
-        while (isThereAnyEventsToHandle);
+        while (await context.GetService<FirstOrDefaultEventPublisher>().PublishFirstOrDefaultEvent(CancellationToken.None))
+        { }
     }
 }

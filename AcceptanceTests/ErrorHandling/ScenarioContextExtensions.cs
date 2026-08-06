@@ -12,4 +12,4 @@ public static class ScenarioContextExtensions
     }
 }
 
-public record AcceptanceError(string? Title, string? Detail);
+public record AcceptanceError(Exception Exception);

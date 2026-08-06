@@ -8,13 +8,13 @@ namespace AcceptanceTests.Configuration
         [BeforeScenario]
         public static void Init(ScenarioContext context)
         {
-            context.Set(new TestServer(context));
+            context.Set(new TestServices(context));
         }
 
         [AfterScenario]
         public static void Clean(ScenarioContext context)
         {
-            context.Get<TestServer>()?.Dispose();
+            context.GetTestServices().Dispose();
         }
     }
 }

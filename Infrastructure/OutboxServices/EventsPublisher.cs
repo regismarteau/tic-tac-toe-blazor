@@ -4,32 +4,34 @@ using RMediator.Abstractions;
 
 namespace Infrastructure.OutboxServices;
 
-public class EventsPublisher(TicTacToeDbContext dbContext, IPublishDomainEvent publisher)
+public class EventsPublisher(FirstOrDefaultEventPublisher eventPublisher)
 {
     public async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            await PublishFirstEvent(stoppingToken);
-            await Task.Delay(10, stoppingToken);
+            if (!await eventPublisher.PublishFirstOrDefaultEvent(stoppingToken))
+            {
+                await Task.Delay(10, stoppingToken);
+            }
         }
     }
+}
 
-    private async Task PublishFirstEvent(CancellationToken stoppingToken)
+public class FirstOrDefaultEventPublisher(TicTacToeDbContext dbContext, IPublishDomainEvent publisher)
+{
+    public async Task<bool> PublishFirstOrDefaultEvent(CancellationToken stoppingToken)
     {
-        try
+        var eventEntity = await dbContext.Outbox.FirstOrDefaultAsync(stoppingToken);
+        if (eventEntity is null)
         {
-            var eventEntity = await dbContext.Outbox.FirstOrDefaultAsync(stoppingToken);
-            if (eventEntity is null)
-            {
-                return;
-            }
-            var domainEvent = eventEntity.Deserialize();
-            await publisher.Publish(domainEvent, stoppingToken);
-            dbContext.Outbox.Remove(eventEntity);
-            await dbContext.SaveChangesAsync(stoppingToken);
+            return false;
         }
-        catch
-        { }
+        var domainEvent = eventEntity.Deserialize();
+        await publisher.Publish(domainEvent, stoppingToken);
+        dbContext.Outbox.Remove(eventEntity);
+        await dbContext.SaveChangesAsync(stoppingToken);
+
+        return true;
     }
 }

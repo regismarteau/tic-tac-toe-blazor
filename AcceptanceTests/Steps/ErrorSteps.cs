@@ -4,18 +4,14 @@ using Reqnroll;
 
 namespace AcceptanceTests.Steps;
 
-public class ErrorSteps : BaseSteps
+public class ErrorSteps(ScenarioContext context) : BaseSteps(context)
 {
-    private readonly ScenarioContext context;
-    public ErrorSteps(ScenarioContext context) : base(context)
-    {
-        this.context = context;
-    }
+    private readonly ScenarioContext context = context;
 
     [Then("^an (.+) error occured$")]
     public void ThenAnCellAlreadyMarkedExceptionErrorOccured(string error)
     {
         var acceptanceError = context.Get<AcceptanceError>();
-        acceptanceError.Detail.Should().Be(error);
+        acceptanceError.Exception.Message.Should().Be(error);
     }
 }

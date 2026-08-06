@@ -1,24 +1,26 @@
 ﻿using AcceptanceTests.Configuration;
 using Domain.ValueObjects;
 using Queries;
+using Reqnroll;
+using UseCases.Commands;
 
 namespace AcceptanceTests.Requests
 {
-    public class GameRequests(AcceptanceClient client)
+    public class GameRequests(ScenarioContext context)
     {
-        public Task<Guid> Start()
+        public async Task<Guid> Start()
         {
-            return client.Post<Guid>("api/game/start");
+            return await context.Dispatch(new StartAGame());
         }
 
-        public Task<GameDto> GetGame(Guid gameId)
+        public async Task<GameDto> GetGame(Guid gameId)
         {
-            return client.Get<GameDto>($"api/game/{gameId}");
+            return await context.Dispatch(new GetGameState(gameId));
         }
 
-        public Task Play(Guid gameId, Cell cell)
+        public async Task Play(Guid gameId, Cell cell)
         {
-            return client.Post($"api/game/{gameId}/play/{cell.ToString()}");
+            await context.Dispatch(new Play(new(gameId), cell));
         }
     }
 }

@@ -1,18 +1,23 @@
-﻿using Database;
+﻿using AcceptanceTests.ErrorHandling;
+using Database;
 using Database.Migrations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
+using Reqnroll;
+using RMediator.DependencyInjection;
 
 namespace AcceptanceTests.Configuration;
 
 public static class ConfigureServices
 {
-    public static IServiceCollection SubstituteServices(this IServiceCollection services)
+    public static IServiceCollection SubstituteServices(this IServiceCollection services, ScenarioContext context)
     {
         return services
             .AddScoped<AsynchronousSideEffectsAwaiter>()
-            .SubstituteDatabase();
+            .AddSingleton(context)
+            .SubstituteDatabase()
+            .AddMediator(o => o.AddMiddlewares(typeof(AcceptanceErrorHandling<>), typeof(AcceptanceErrorHandling<,>)));
     }
 
     private static IServiceCollection SubstituteDatabase(this IServiceCollection services)

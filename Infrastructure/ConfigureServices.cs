@@ -41,6 +41,7 @@ public static class ConfigureServices
     {
         return services
             .AddHostedService<BackgroundEventsPublisherService>()
-            .AddScoped<EventsPublisher>();
+            .AddScoped<EventsPublisher>()
+            .AddScoped<FirstOrDefaultEventPublisher>();
     }
 }

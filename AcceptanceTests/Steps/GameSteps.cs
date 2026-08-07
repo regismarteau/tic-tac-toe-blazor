@@ -26,6 +26,12 @@ public partial class GameSteps(ScenarioContext context) : BaseSteps(context)
         await Context.WaitForSideEffects();
     }
 
+    [When("I retry a new game")]
+    public async Task WhenIRetryANewGame()
+    {
+        await Page.FindByDataTest("retry-button").ClickAsync();
+    }
+
     [Then("the game looks like")]
     public void ThenTheGameLooksLike(DataTable table)
     {

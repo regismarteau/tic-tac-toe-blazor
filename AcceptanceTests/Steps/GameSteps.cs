@@ -27,7 +27,7 @@ public partial class GameSteps(ScenarioContext context) : BaseSteps(context)
     }
 
     [Then("the game looks like")]
-    public async Task ThenTheGameLooksLike(DataTable table)
+    public void ThenTheGameLooksLike(DataTable table)
     {
         var cells = Page.FindComponents<CellComponent>();
         cells.Select(MarkAssertion.From)
@@ -36,16 +36,16 @@ public partial class GameSteps(ScenarioContext context) : BaseSteps(context)
     }
 
     [Then("the game ends in a draw")]
-    public async Task ThenTheGameEndsInADraw(DataTable table)
+    public void ThenTheGameEndsInADraw(DataTable table)
     {
-        await ThenTheGameLooksLike(table);
+        ThenTheGameLooksLike(table);
         Page.FindByDataTest("draw-modal").Should().NotBeNull();
     }
 
     [Then("^the game has been won by the computer$")]
-    public async Task ThenTheGameHasBeenWonBy(DataTable table)
+    public void ThenTheGameHasBeenWonBy(DataTable table)
     {
-        await ThenTheGameLooksLike(table);
+        ThenTheGameLooksLike(table);
         Page.FindByDataTest("you-loose-modal").Should().NotBeNull();
     }
 

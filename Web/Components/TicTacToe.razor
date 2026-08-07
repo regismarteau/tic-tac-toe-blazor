@@ -1,9 +1,10 @@
 ﻿@using Domain.DomainEvents
 @using Queries
 @using UseCases.Commands
+@using Web.Dispatchers
 @using Web.Extensions
 @inherits DispatcherComponent
-@implements IRefreshComponentOn<CellMarked>
+@implements IComponentListeningTo<CellMarked>
 
 <div class="tic-tac-toe-container fade-in">
     @foreach (var cell in Enum.GetValues<CellDto>())
@@ -33,7 +34,7 @@
         await Dispatch(new Play(new(GameId), cell.ToDomain()));
     }
 
-    public async Task Refresh(CellMarked @event)
+    public async Task Listen(CellMarked @event)
     {
         currentGame = await Dispatch(new GetGameState(GameId));
         await StateHasChangedAsync();

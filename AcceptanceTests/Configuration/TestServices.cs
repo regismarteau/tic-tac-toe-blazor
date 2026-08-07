@@ -2,7 +2,7 @@
 using Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Reqnroll;
-using Web;
+using Web.Configurations;
 
 namespace AcceptanceTests.Configuration;
 

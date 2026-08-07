@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using Queries
 @using UseCases.Commands
+@using Web.Dispatchers
 @rendermode InteractiveServer
 @inherits DispatcherComponent
 
@@ -8,7 +9,7 @@
 
 @if (gameId is null)
 {
-    <div class="fade-in center">
+    <div class="fade-in-up-large center">
         <h1>Unbeatable Tic Tac Toe!</h1>
         <button data-test="start-button" @onclick="StartNewGame">Start!</button>
     </div>

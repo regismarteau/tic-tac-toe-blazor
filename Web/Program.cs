@@ -1,6 +1,7 @@
 using Database.Migrations;
 using Infrastructure;
 using Web;
+using Web.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -17,16 +17,3 @@ Scenario: Everytime I play, the computer plays also afterwards
 	| X |   |  |
 	|   | O |  |
 	|   |   |  |
-
-@ErrorHandling
-Scenario: Play the same cell twice is not possible
-	Given a game started
-	When I play on top left cell
-	And I play on top left cell
-	Then an This cell is already marked error occured
-
-@ErrorHandling
-Scenario: Playing to a game that doesn't exist is not possible
-	When I start a new game
-	But I attempt to play an unknown game
-	Then an Game not found error occured

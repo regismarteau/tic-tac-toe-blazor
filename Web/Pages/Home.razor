@@ -8,7 +8,7 @@
 @if (gameId is null)
 {
     <h1>Unbeatable Tic Tac Toe!</h1>
-    <button @onclick="StartNewGame">Start!</button>
+    <button data-test="start-button" @onclick="StartNewGame">Start!</button>
 }
 else {
     <TicTacToe GameId="gameId.Value" GameResetted="StartNewGame" />

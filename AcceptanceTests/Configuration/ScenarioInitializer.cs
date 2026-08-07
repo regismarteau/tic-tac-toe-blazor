@@ -1,4 +1,5 @@
-﻿using Reqnroll;
+﻿using AcceptanceTests.Extensions;
+using Reqnroll;
 
 namespace AcceptanceTests.Configuration
 {

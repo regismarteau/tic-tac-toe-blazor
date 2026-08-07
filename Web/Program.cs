@@ -1,6 +1,5 @@
 using Database.Migrations;
 using Infrastructure;
-using RMediator.DependencyInjection;
 using Web;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,8 +8,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .Services
     .AddTicTacToeServices(new ConfigurationBuilder().AddEnvironmentVariables().Build())
-    .AddSingleton<DomainEventComponentListeners>()
-    .AddMediator(o => o.ScanAssemblies(typeof(Program).Assembly));
+    .AddWebServices();
 
 var app = builder.Build();
 await app.Services.GetRequiredService<IMigrateDatabase>().Migrate();

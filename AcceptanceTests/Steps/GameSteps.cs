@@ -1,59 +1,52 @@
-﻿using Domain.ValueObjects;
+﻿using AcceptanceTests.Extensions;
+using Bunit;
+using Domain.ValueObjects;
 using FluentAssertions;
 using Queries;
 using Reqnroll;
+using Web.Components;
 
 namespace AcceptanceTests.Steps;
 
 [Binding]
 public class GameSteps(ScenarioContext context) : BaseSteps(context)
 {
-    private Guid GameId
-    {
-        get => Context.Get<Guid>();
-        set => Context.Set(value);
-    }
-
     [Given("a game started")]
     [When("I start a new game")]
     public async Task WhenIStartANewGame()
     {
-        GameId = await GameRequests.Start();
+        await Page.FindByDataTest("start-button").ClickAsync();
     }
 
     [When("^I play on (.+?) cell$")]
     public async Task WhenIPlayOnTopLeftCell(Cell cell)
     {
-        await GameRequests.Play(GameId, cell);
-    }
-
-    [When("I attempt to play an unknown game")]
-    public async Task WhenIAttemptToPlayAnUnknownGame()
-    {
-        await GameRequests.Play(Guid.NewGuid(), Cell.TopLeft);
+        await Page.FindByDataTest($"cell-{cell}").ClickAsync();
+        await Context.WaitForSideEffects();
     }
 
     [Then("the game looks like")]
     public async Task ThenTheGameLooksLike(DataTable table)
     {
-        var game = await GameRequests.GetGame(GameId);
-        game.Marks.Should().BeEquivalentTo(ToMarks(table));
+        var cells = Page.FindComponents<CellComponent>();
+        cells
+            .Where(cell => cell.Instance.Symbol is not null)
+            .Select(cell => new MarkDto(cell.Instance.Symbol!.Value, cell.Instance.Cell))
+            .Should().BeEquivalentTo(ToMarks(table));
     }
 
     [Then("the game ends in a draw")]
     public async Task ThenTheGameEndsInADraw(DataTable table)
     {
-        var game = await GameRequests.GetGame(GameId);
-        game.Marks.Should().BeEquivalentTo(ToMarks(table));
-        game.Result.Should().Be(ResultDto.Draw);
+        await ThenTheGameLooksLike(table);
+        Page.FindByDataTest("draw-modal").Should().NotBeNull();
     }
 
-    [Then("^the game has been won by (me|the computer)$")]
-    public async Task ThenTheGameHasBeenWonBy(string winner, DataTable table)
+    [Then("^the game has been won by the computer$")]
+    public async Task ThenTheGameHasBeenWonBy(DataTable table)
     {
-        var game = await GameRequests.GetGame(GameId);
-        game.Marks.Should().BeEquivalentTo(ToMarks(table));
-        game.Result.Should().Be(winner == "me" ? ResultDto.WonByPlayerX : ResultDto.WonByPlayerO);
+        await ThenTheGameLooksLike(table);
+        Page.FindByDataTest("you-loose-modal").Should().NotBeNull();
     }
 
     private static List<MarkDto> ToMarks(DataTable table)

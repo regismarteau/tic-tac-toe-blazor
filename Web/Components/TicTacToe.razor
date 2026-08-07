@@ -8,20 +8,20 @@
 <div class="tic-tac-toe-container">
     @foreach (var cell in Enum.GetValues<CellDto>())
     {
-        <Cell Symbol="currentGame?.Marks.FirstOrDefault(m => m.Cell == cell)?.Symbol" Selected="() => SelectCell(cell)" />
+        <CellComponent Cell="cell" Symbol="currentGame?.Marks.FirstOrDefault(m => m.Cell == cell)?.Symbol" Selected="SelectCell" />
     }
 </div>
 
 @if(currentGame?.Result is ResultDto.Draw)
 {
-    <div class="floating">
+    <div class="floating" data-test="draw-modal">
         <span>Draw :/</span>
         <button @onclick="ResetGame">Retry</button>
     </div>
 }
 else if (currentGame?.Result is ResultDto.WonByPlayerO)
 {
-    <div class="floating">
+    <div class="floating" data-test="you-loose-modal">
         <span>You loose :(</span>
         <button @onclick="ResetGame">Retry</button>
     </div>

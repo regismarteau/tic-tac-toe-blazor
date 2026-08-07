@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using RMediator.Abstractions;
+using RMediator.DependencyInjection;
 
 namespace Web;
 
@@ -78,4 +79,17 @@ public class ListenToAllDomainEvents(DomainEventComponentListeners componentList
 public class DomainEventComponentListeners
 {
     public readonly IList<DispatcherComponent> Components = [];
+}
+
+public static class ConfigureServices
+{
+    extension(IServiceCollection services)
+    {
+        public IServiceCollection AddWebServices()
+        {
+            return services
+                .AddSingleton<DomainEventComponentListeners>()
+                .AddMediator(o => o.ScanAssemblies(typeof(Program).Assembly));
+        }
+    }
 }

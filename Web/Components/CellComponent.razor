@@ -1,5 +1,6 @@
 ﻿@using Queries
 <div 
+    data-test="cell-@Cell"
     class="cell-container @(Symbol is SymbolDto.Cross ? "cross" : Symbol is SymbolDto.Nought ? "nought" : "")" 
     @onclick="Select">
     @(Symbol is null ? Empty : Symbol is SymbolDto.Cross ? Cross : Nought)
@@ -8,8 +9,10 @@
 @code {
     [Parameter]
     public SymbolDto? Symbol { get; set; }
+    [Parameter, EditorRequired]
+    public CellDto Cell { get; set; }
     [Parameter, EditorRequired] 
-    public EventCallback Selected { get; set; }
+    public EventCallback<CellDto> Selected { get; set; }
 
     private MarkupString Empty => ((MarkupString)"&nbsp;");
 
@@ -21,7 +24,7 @@
     {
         if(Symbol is null)
         {
-            await Selected.InvokeAsync();
+            await Selected.InvokeAsync(this.Cell);
         }
     }
 }

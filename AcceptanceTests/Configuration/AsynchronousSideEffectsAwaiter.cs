@@ -1,4 +1,5 @@
-﻿using Infrastructure.OutboxServices;
+﻿using AcceptanceTests.Extensions;
+using Infrastructure.OutboxServices;
 using Reqnroll;
 
 namespace AcceptanceTests.Configuration;

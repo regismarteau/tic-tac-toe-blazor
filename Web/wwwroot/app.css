@@ -1,20 +1,31 @@
 :root {
-    --player-color: #0E49B5;
-    --computer-color: #ED0101;
+    --font-family: "Montserrat", sans-serif;
+    --player-color: #459aee;
+    --computer-color: #f98100;
+    --lighter-main-background-color: #f2f2fd;
+    --darker-main-background-color: #e2edf5;
+    --font-primary-color: #505050;
+    --main-background-color: radial-gradient(var(--lighter-main-background-color), var(--darker-main-background-color));
+    --border-color: #8f9aa6;
+    --button-color: #6053ee;
 }
 
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: var(--font-family);
     display: flex;
     flex: 1;
     align-items: center;
     justify-content: center;
     height: 100vh;
-    color: #333;
+    background: var(--main-background-color);
+    color: var(--font-primary-color);
 }
 
 button {
     font-size: 16px;
-    padding: 10px;
+    padding: 16px 32px;
     border-radius: 5px;
+    border: 0;
+    background-color: #6053ee;
+    color: white;
 }

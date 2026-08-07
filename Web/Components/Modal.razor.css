@@ -1,13 +1,14 @@
-.floating {
+.modal {
     position: absolute;
     display: flex;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(16px);
     border-radius: 4px;
-    box-shadow: 0 1px 1px 4px #DDD;
+    box-shadow: 0 1px 5px 4px #DDD;
     flex: 1;
     flex-direction: column;
     gap: 16px;
     align-items: center;
-    padding: 8px 50px;
-    font-size: 20px;
+    padding: 20px;
+    font-size: 32px;
+    min-width: 200px;
 }

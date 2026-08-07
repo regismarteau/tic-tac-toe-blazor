@@ -1,0 +1,9 @@
+﻿<div class="modal" data-test="@DataTest">
+    @ChildContent
+</div>
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+    [Parameter]
+    public string DataTest { get; set; } = default!;
+}

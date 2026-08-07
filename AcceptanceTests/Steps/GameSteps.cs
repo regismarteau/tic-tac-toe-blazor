@@ -1,4 +1,5 @@
-﻿using AcceptanceTests.Extensions;
+﻿using AcceptanceTests.AssertionModels;
+using AcceptanceTests.Extensions;
 using Bunit;
 using Domain.ValueObjects;
 using FluentAssertions;
@@ -9,7 +10,7 @@ using Web.Components;
 namespace AcceptanceTests.Steps;
 
 [Binding]
-public class GameSteps(ScenarioContext context) : BaseSteps(context)
+public partial class GameSteps(ScenarioContext context) : BaseSteps(context)
 {
     [Given("a game started")]
     [When("I start a new game")]
@@ -29,10 +30,9 @@ public class GameSteps(ScenarioContext context) : BaseSteps(context)
     public async Task ThenTheGameLooksLike(DataTable table)
     {
         var cells = Page.FindComponents<CellComponent>();
-        cells
-            .Where(cell => cell.Instance.Symbol is not null)
-            .Select(cell => new MarkDto(cell.Instance.Symbol!.Value, cell.Instance.Cell))
-            .Should().BeEquivalentTo(ToMarks(table));
+        cells.Select(MarkAssertion.From)
+            .Should()
+            .BeEquivalentTo(ToMarks(table));
     }
 
     [Then("the game ends in a draw")]
@@ -49,15 +49,17 @@ public class GameSteps(ScenarioContext context) : BaseSteps(context)
         Page.FindByDataTest("you-loose-modal").Should().NotBeNull();
     }
 
-    private static List<MarkDto> ToMarks(DataTable table)
+    private static List<MarkAssertion> ToMarks(DataTable table)
     {
-        return table.Header
+        return [.. table.Header
             .Concat(table.Rows.SelectMany(row => row.Values))
             .Select((cellContent, index) => new { CellContent = cellContent, Index = index })
-            .Where(cell => !string.IsNullOrWhiteSpace(cell.CellContent))
-            .Select(cell => new MarkDto(
-                Symbol: cell.CellContent.ToLowerInvariant() == "x" ? SymbolDto.Cross : SymbolDto.Nought,
-                Cell: (CellDto)cell.Index))
-            .ToList();
+            .Select(cell => new MarkAssertion(
+                Cell: (CellDto)cell.Index,
+                Symbol: string.IsNullOrWhiteSpace(cell.CellContent) ?
+                    null :
+                    cell.CellContent.Equals("x", StringComparison.InvariantCultureIgnoreCase) ?
+                        SymbolDto.Cross :
+                        SymbolDto.Nought))];
     }
 }

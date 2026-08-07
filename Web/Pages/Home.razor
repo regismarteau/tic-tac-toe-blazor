@@ -8,8 +8,10 @@
 
 @if (gameId is null)
 {
-    <h1>Unbeatable Tic Tac Toe!</h1>
-    <button data-test="start-button" @onclick="StartNewGame">Start!</button>
+    <div class="fade-in center">
+        <h1>Unbeatable Tic Tac Toe!</h1>
+        <button data-test="start-button" @onclick="StartNewGame">Start!</button>
+    </div>
 }
 else {
     <TicTacToe GameId="gameId.Value" GameCompleted="DisplayResult" />

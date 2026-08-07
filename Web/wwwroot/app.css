@@ -6,7 +6,7 @@
     --darker-main-background-color: #e2edf5;
     --font-primary-color: #505050;
     --main-background-color: radial-gradient(var(--lighter-main-background-color), var(--darker-main-background-color));
-    --border-color: #8f9aa6;
+    --border-color: #ddd;
     --button-color: #6053ee;
 }
 
@@ -20,6 +20,9 @@ html, body {
     background: var(--main-background-color);
     color: var(--font-primary-color);
 }
+h1{
+    font-size: 50px;
+}
 
 button {
     font-size: 16px;
@@ -28,4 +31,55 @@ button {
     border: 0;
     background-color: #6053ee;
     color: white;
+    cursor: pointer;
+}
+
+.center {
+    text-align:center;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 1s ease-in-out;
+}
+
+@keyframes fadeInUpLarge {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
+.fade-in-up-large {
+    animation: fadeInUpLarge 1s ease-in-out;
 }

@@ -31,7 +31,10 @@
 
     private async Task SelectCell(CellDto cell)
     {
-        await Dispatch(new Play(new(GameId), cell.ToDomain()));
+        if ((this.currentGame?.Result ?? ResultDto.Undetermined) is ResultDto.Undetermined)
+        {
+            await Dispatch(new Play(new(GameId), cell.ToDomain()));
+        }
     }
 
     public async Task Listen(CellMarked @event)

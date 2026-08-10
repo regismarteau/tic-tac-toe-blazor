@@ -1,0 +1,2 @@
+# Web
+This is basically the front-end project containing the Blazor pages and configuration. As it is configured to be executed on server-side, the pages are able to dispatch directly commands and queries to have the most straight-forward application as possible.

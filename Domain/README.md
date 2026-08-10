@@ -10,8 +10,8 @@ Services helps also the business in the decision-making process. For example, th
 ## Pros
 This kind of design and isolation helps a lot to guarantee consistency over time and reducing accidental complexity.
 Also it ease the testability of all business logic without the need to mock / stub technical concept that doesn't apply here. 
-See [UnitTests](https://github.com/regismarteau/tic-tac-toe/tree/main/UnitTests) for related tests.
+See [UnitTests](https://github.com/regismarteau/tic-tac-toe-blazor/tree/main/UnitTests) for related tests.
 
 ## Trade-offs
-You might notice the use of [MediatR.Contracts](https://www.nuget.org/packages/MediatR.Contracts) and specially the `INotification` interface that will help to handle the propagation of events through the system. This is completely arguable and in a more complex system I would suggest to decouple inbox and outbox events.
-See [UseCases](https://github.com/regismarteau/tic-tac-toe/tree/main/UseCases) for more detail.
+You might notice the use of [RMediator.Abstractions](https://www.nuget.org/packages/RMediator.Abstractions) and specially the `IDomainEvent` interface that will help to handle the propagation of events through the system. This is completely arguable and in a more complex system I would suggest to decouple inbox and outbox events.
+See [UseCases](https://github.com/regismarteau/tic-tac-toe-blazor/tree/main/UseCases) for more detail.

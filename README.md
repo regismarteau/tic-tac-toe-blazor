@@ -2,7 +2,7 @@
 This is a .NET application exposing endpoints to play to a Tic tac toe game versus a computer that doesn't want to loose against you!
 
 # Purpose
-This is a repository to illustrate an efficient way to develop Web API at a larger scale. This type of architecture and solutions have already been developed and used in a production environment.
+This is a repository to illustrate an efficient way to develop Web Blazor server at a larger scale. This type of architecture and solutions have already been developed and used in a production environment. It has been inspired from the API version available [here](https://github.com/regismarteau/tic-tac-toe).
 
 It uses some of the top modern designs, such as :
 - Clean architecture
@@ -29,14 +29,14 @@ flowchart LR
     Web:::application --> Infrastructure
     UnitTests:::test --> Domain
     AcceptanceTests:::test --> Web
-	click Domain "https://github.com/regismarteau/tic-tac-toe/tree/main/Domain"
-	click UseCases "https://github.com/regismarteau/tic-tac-toe/tree/main/UseCases"
-	click Queries "https://github.com/regismarteau/tic-tac-toe/tree/main/Queries"
-	click Infrastructure "https://github.com/regismarteau/tic-tac-toe/tree/main/Infrastructure"
-	click Web "https://github.com/regismarteau/tic-tac-toe/tree/main/Web"
-	click UnitTests "https://github.com/regismarteau/tic-tac-toe/tree/main/UnitTests"
-	click AcceptanceTests "https://github.com/regismarteau/tic-tac-toe/tree/main/AcceptanceTests"
-	click Database "https://github.com/regismarteau/tic-tac-toe/tree/main/Database"
+	click Domain "https://github.com/regismarteau/tic-tac-toe-blazor/tree/main/Domain"
+	click UseCases "https://github.com/regismarteau/tic-tac-toe-blazor/tree/main/UseCases"
+	click Queries "https://github.com/regismarteau/tic-tac-toe-blazor/tree/main/Queries"
+	click Infrastructure "https://github.com/regismarteau/tic-tac-toe-blazor/tree/main/Infrastructure"
+	click Web "https://github.com/regismarteau/tic-tac-toe-blazor/tree/main/Web"
+	click UnitTests "https://github.com/regismarteau/tic-tac-toe-blazor/tree/main/UnitTests"
+	click AcceptanceTests "https://github.com/regismarteau/tic-tac-toe-blazor/tree/main/AcceptanceTests"
+	click Database "https://github.com/regismarteau/tic-tac-toe-blazor/tree/main/Database"
 ```
 
 # Disclaimer

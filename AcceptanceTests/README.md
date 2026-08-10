@@ -4,9 +4,11 @@ Taking distance with the implementation, its main responsability is to verify th
 This is for me the best way to have confidence in the quality of the application, and it allows major refactoring and evolution at a minimum risk.
 
 They also fit really well with `Behaviour Driven Development` (or `Acceptance Test Driven Development`) and offer the opportunity to validate the interaction between services, layers, sub-systems, etc.
-For example here, they represent a good way to test `queries` by dispatching `commands` first without the need to populate data by hand in a mock (which can ends to unexpected behaviour if the data hasn't been verified)?
+For example here, they represent a good way to test `queries` by dispatching `commands` first without the need to populate data by hand in a mock (which can ends to unexpected behaviour if the data hasn't been verified).
 
 Well designed, it can provide a living documentation about all of your application's features. This is why I personally use [Reqnroll](https://github.com/reqnroll/Reqnroll) to have the most understable scenarios possible. In a optimistic way, it can lead also to a collaboration with the business to define them and make sure that we are all aligned with the expectations.
+
+As the application turns into a Blazor server, [bUnit](https://github.com/bUnit-dev/bUnit) offers the capability to test quite easily the whole system by manipulating the components.
 
 ## Notes
 - I've chosen to override eventual consistency by waiting side effects explicitely after each requests as it gives more natural scenarios.

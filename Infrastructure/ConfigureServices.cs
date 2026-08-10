@@ -34,7 +34,8 @@ public static class ConfigureServices
     {
         return services
             .AddScoped<IFindGame, GameRepository>()
-            .AddScoped<IStoreGame, GameRepository>();
+            .AddScoped<IStoreGame, GameRepository>()
+            .AddScoped<DbContextSaveChanges>();
     }
 
     private static IServiceCollection AddEventsPublisher(this IServiceCollection services)
@@ -42,6 +43,7 @@ public static class ConfigureServices
         return services
             .AddHostedService<BackgroundEventsPublisherService>()
             .AddScoped<EventsPublisher>()
+            .AddSingleton<DomainEventToPublishAwaiter>()
             .AddScoped<FirstOrDefaultEventPublisher>();
     }
 }

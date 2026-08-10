@@ -4,21 +4,19 @@ using RMediator.Abstractions;
 
 namespace Infrastructure.OutboxServices;
 
-public class EventsPublisher(FirstOrDefaultEventPublisher eventPublisher)
+public class EventsPublisher(FirstOrDefaultEventPublisher eventPublisher, DomainEventToPublishAwaiter awaiter)
 {
     public async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            if (!await eventPublisher.PublishFirstOrDefaultEvent(stoppingToken))
-            {
-                await Task.Delay(10, stoppingToken);
-            }
+            await awaiter.WaitForADomainEvent(stoppingToken);
+            await eventPublisher.PublishFirstOrDefaultEvent(stoppingToken);
         }
     }
 }
 
-public class FirstOrDefaultEventPublisher(TicTacToeDbContext dbContext, IPublishDomainEvent publisher)
+public class FirstOrDefaultEventPublisher(TicTacToeDbContext dbContext, DbContextSaveChanges changes, IPublishDomainEvent publisher)
 {
     public async Task<bool> PublishFirstOrDefaultEvent(CancellationToken stoppingToken)
     {
@@ -30,7 +28,7 @@ public class FirstOrDefaultEventPublisher(TicTacToeDbContext dbContext, IPublish
         var domainEvent = eventEntity.Deserialize();
         await publisher.Publish(domainEvent, stoppingToken);
         dbContext.Outbox.Remove(eventEntity);
-        await dbContext.SaveChangesAsync(stoppingToken);
+        await changes.SaveAsync(stoppingToken);
 
         return true;
     }

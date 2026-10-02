@@ -14,67 +14,68 @@ namespace Infrastructure;
 
 public class GameRepository(TicTacToeDbContext dbContext) : IFindGame, IStoreGame
 {
-    public async Task<Game> Get(GameId id)
+    public async Task<Game> Get(GameId id, CancellationToken cancellationToken)
     {
         var game = await dbContext.Games
             .ById(id.Value)
             .Select(game => new
             {
                 game.Id,
-                Marks = game.Marks.Select(
-                    mark => new Mark(
-                        mark.Player == PlayerValue.X ? Player.X : Player.O,
-                        mark.Cell.Map())).ToList()
+                Marks = game.Marks.Select(mark => new
+                {
+                    mark.Player,
+                    mark.Cell
+                }).ToList()
             })
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync(cancellationToken) ?? throw new GameNotFoundException();
 
-        return Game.Rehydrate(new(
-            game?.Id ?? throw new GameNotFoundException()),
-            game.Marks);
+        return Game.Rehydrate(new(game.Id), game.Marks.Select(mark => ToMark(mark.Player, mark.Cell)).ToList());
     }
 
-    public async Task Store(Events events)
+    public async Task Store(Events events, CancellationToken cancellationToken)
     {
         foreach (var @event in events)
         {
-            await Handle(@event);
-            await dbContext.Outbox.AddAsync(@event.Serialize());
+            await Handle(@event, cancellationToken);
+            await dbContext.Outbox.AddAsync(@event.Serialize(), cancellationToken);
         }
     }
 
-    private Task Handle(IDomainEvent @event) => @event switch
+    private static Mark ToMark(PlayerValue player, CellValue cell) => new(player == PlayerValue.X ? Player.X : Player.O, cell.Map());
+
+    private Task Handle(IDomainEvent @event, CancellationToken cancellationToken) => @event switch
     {
-        GameStarted started => Handle(started),
-        CellMarked marked => Handle(marked),
-        GameWon won => Handle(won),
-        GameResultedAsADraw draw => Handle(draw),
-        _ => Task.CompletedTask,
+        GameStarted started => Handle(started, cancellationToken),
+        CellMarked marked => Handle(marked, cancellationToken),
+        GameWon won => Handle(won, cancellationToken),
+        GameResultedAsADraw draw => Handle(draw, cancellationToken),
+        _ => Task.CompletedTask
     };
 
-    private async Task Handle(GameStarted started) => await dbContext.Games.AddAsync(new GameEntity
+    private async Task Handle(GameStarted started, CancellationToken cancellationToken) => await dbContext.Games.AddAsync(new()
     {
         Id = started.Id.Value,
         Result = ResultValue.Undetermined
-    });
+    }, cancellationToken);
 
-    private async Task Handle(GameWon won)
+    private async Task Handle(GameWon won, CancellationToken cancellationToken)
     {
-        var game = await GetEntity(won.Id);
+        var game = await GetEntity(won.Id, cancellationToken);
         game.Result = won.By == Player.X ? ResultValue.WonByPlayerX : ResultValue.WonByPlayerO;
     }
 
-    private async Task Handle(GameResultedAsADraw draw)
+    private async Task Handle(GameResultedAsADraw draw, CancellationToken cancellationToken)
     {
-        var game = await GetEntity(draw.Id);
+        var game = await GetEntity(draw.Id, cancellationToken);
         game.Result = ResultValue.Draw;
     }
 
-    private async Task Handle(CellMarked marked) => await dbContext.AddAsync(new MarkEntity
+    private async Task Handle(CellMarked marked, CancellationToken cancellationToken) => await dbContext.AddAsync(new MarkEntity
     {
         GameId = marked.GameId.Value,
         Player = marked.Player == Player.X ? PlayerValue.X : PlayerValue.O,
         Cell = marked.Cell.Map()
-    });
+    }, cancellationToken);
 
-    private async Task<GameEntity> GetEntity(GameId id) => await dbContext.Games.ById(id.Value).SingleAsync();
+    private async Task<GameEntity> GetEntity(GameId id, CancellationToken cancellationToken) => await dbContext.Games.ById(id.Value).SingleAsync(cancellationToken);
 }

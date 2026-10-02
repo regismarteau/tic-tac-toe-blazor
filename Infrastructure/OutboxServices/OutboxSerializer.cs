@@ -1,28 +1,33 @@
 using Database.Entities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using RMediator.Abstractions;
 
 namespace Infrastructure.OutboxServices;
 
 public static class OutboxSerializer
 {
-    public static OutboxEventEntity Serialize(this IDomainEvent @event)
+    private static readonly JsonSerializerSettings Settings = new()
     {
-        return new OutboxEventEntity
-        {
-            EventId = Guid.NewGuid(),
-            Json = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All
-            })
-        };
-    }
+        TypeNameHandling = TypeNameHandling.Auto,
+        SerializationBinder = new DomainEventsBinder()
+    };
 
-    public static IDomainEvent Deserialize(this OutboxEventEntity entity)
+    public static OutboxEventEntity Serialize(this IDomainEvent @event) => new()
     {
-        return JsonConvert.DeserializeObject<IDomainEvent>(entity.Json, new JsonSerializerSettings
+        EventId = Guid.NewGuid(),
+        Json = JsonConvert.SerializeObject(@event, typeof(IDomainEvent), Settings)
+    };
+
+    public static IDomainEvent Deserialize(this OutboxEventEntity entity) => JsonConvert.DeserializeObject<IDomainEvent>(entity.Json, Settings)
+        ?? throw new InvalidOperationException("Unable to deserialize event");
+
+    private sealed class DomainEventsBinder : DefaultSerializationBinder
+    {
+        public override Type BindToType(string? assemblyName, string typeName)
         {
-            TypeNameHandling = TypeNameHandling.Auto
-        }) ?? throw new InvalidOperationException("Unable to deserialize event");
+            var type = base.BindToType(assemblyName, typeName);
+            return typeof(IDomainEvent).IsAssignableFrom(type) ? type : throw new JsonSerializationException($"Type {typeName} is not a domain event");
+        }
     }
 }

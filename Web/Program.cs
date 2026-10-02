@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .Services
-    .AddTicTacToeServices(new ConfigurationBuilder().AddEnvironmentVariables().Build())
+    .AddTicTacToeServices(builder.Configuration)
     .AddWebServices();
 
 var app = builder.Build();

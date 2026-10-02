@@ -1,9 +1,8 @@
-﻿@using Queries
-<div 
-    data-test="cell-@Cell"
-    class="cell-container @(Symbol is SymbolDto.Cross ? "cross" : Symbol is SymbolDto.Nought ? "nought" : "")" 
-    @onclick="Select">
-    @(Symbol is null ? Empty : Symbol is SymbolDto.Cross ? Cross : Nought)
+@using Queries
+<div class="cell" data-test="@($"cell-{Cell}")" @onclick="Select">
+    <MudPaper Elevation="0" Square="true" Class="@($"surface-subtle {SymbolClass}")">
+        @(Symbol is null ? Empty : Symbol is SymbolDto.Cross ? Cross : Nought)
+    </MudPaper>
 </div>
 
 @code {
@@ -13,6 +12,8 @@
     public CellDto Cell { get; set; }
     [Parameter, EditorRequired] 
     public EventCallback<CellDto> Selected { get; set; }
+
+    private string SymbolClass => Symbol is SymbolDto.Cross ? "text-player" : Symbol is SymbolDto.Nought ? "text-computer" : "";
 
     private MarkupString Empty => ((MarkupString)"&nbsp;");
 

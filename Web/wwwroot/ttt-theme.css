@@ -1,0 +1,67 @@
+/*
+ * Design system de l'application.
+ * Palette, typographie et rayons sont définis dans Theme/TicTacToeTheme.cs (MudTheme).
+ * Ce fichier ne contient que ce que le MudTheme ne sait pas exprimer :
+ * rôles sémantiques, surcharges globales des composants MudBlazor, surfaces et animations réutilisables.
+ * Le layout propre à chaque composant est dans son fichier .razor.css.
+ */
+
+:root {
+    /* Rôles sémantiques, adossés à la palette MudBlazor */
+    --ttt-player-color: var(--mud-palette-info);
+    --ttt-computer-color: var(--mud-palette-warning);
+
+    --ttt-background: radial-gradient(#f2f2fd, #e2edf5);
+}
+
+html, body {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: var(--mud-typography-default-family);
+    background: var(--ttt-background);
+    color: var(--mud-palette-text-primary);
+}
+
+/* Surcharges globales des composants MudBlazor */
+.mud-button-filled {
+    padding: 16px 32px;
+    box-shadow: none;
+}
+
+/* Rôles */
+.text-player { color: var(--ttt-player-color); }
+.text-computer { color: var(--ttt-computer-color); }
+
+/* Surfaces (à appliquer sur MudPaper) */
+.surface-glass {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(16px);
+}
+
+.surface-subtle {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 0 1px var(--mud-palette-lines-default);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUpLarge {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 1s ease-in-out; }
+.fade-in-up { animation: fadeInUp 1s ease-in-out; }
+.fade-in-up-large { animation: fadeInUpLarge 1s ease-in-out; }

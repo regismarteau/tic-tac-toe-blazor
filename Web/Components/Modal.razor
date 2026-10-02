@@ -1,5 +1,9 @@
-﻿<div class="modal fade-in-up" data-test="@DataTest">
-    @ChildContent
+<div class="modal-position fade-in-up" data-test="@DataTest">
+    <MudPaper Elevation="5" Class="surface-glass pa-5">
+        <MudStack Spacing="4" AlignItems="AlignItems.Center">
+            @ChildContent
+        </MudStack>
+    </MudPaper>
 </div>
 @code {
     [Parameter]

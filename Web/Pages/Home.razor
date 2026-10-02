@@ -9,10 +9,10 @@
 
 @if (gameId is null)
 {
-    <div class="fade-in-up-large center">
-        <h1>Unbeatable Tic Tac Toe!</h1>
-        <button data-test="start-button" @onclick="StartNewGame">Start!</button>
-    </div>
+    <MudStack Class="fade-in-up-large" AlignItems="AlignItems.Center" Spacing="4">
+        <MudText Typo="Typo.h1" Align="Align.Center">Unbeatable Tic Tac Toe!</MudText>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" data-test="start-button" OnClick="StartNewGame">Start!</MudButton>
+    </MudStack>
 }
 else {
     <TicTacToe GameId="gameId.Value" GameCompleted="DisplayResult" />
@@ -21,14 +21,14 @@ else {
 @switch(lastGameResult){
     case ResultDto.Draw:
         <Modal DataTest="draw-modal">
-            <span>Draw!</span>
-            <button data-test="retry-button" @onclick="StartNewGame">Retry</button>
+            <MudText Typo="Typo.h4">Draw!</MudText>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" data-test="retry-button" OnClick="StartNewGame">Retry</MudButton>
         </Modal>
         break;
     case ResultDto.WonByPlayerO :
         <Modal DataTest="you-loose-modal">
-            <span>You loose!</span>
-            <button data-test="retry-button" @onclick="StartNewGame">Retry</button>
+            <MudText Typo="Typo.h4">You loose!</MudText>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" data-test="retry-button" OnClick="StartNewGame">Retry</MudButton>
         </Modal>
         break;
 }

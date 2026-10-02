@@ -6,7 +6,7 @@
 @inherits DispatcherComponent
 @implements IComponentListeningTo<CellMarked>
 
-<div class="tic-tac-toe-container fade-in">
+<div class="board fade-in">
     @foreach (var cell in Enum.GetValues<CellDto>())
     {
         <CellComponent Cell="cell" Symbol="currentGame?.Marks.FirstOrDefault(m => m.Cell == cell)?.Symbol" Selected="SelectCell" />

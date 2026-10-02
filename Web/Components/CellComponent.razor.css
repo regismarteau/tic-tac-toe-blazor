@@ -1,19 +1,14 @@
-.cell-container {
+.cell {
     display: flex;
-    cursor: pointer;
-    box-shadow: 0 0 0 1px var(--border-color);
     margin: 0 0 1px 1px;
+    cursor: pointer;
+    font-size: 50px;
+    line-height: 0;
+}
+
+.cell ::deep .mud-paper {
+    display: flex;
+    flex: 1;
     align-items: center;
     justify-content: center;
-    line-height: 0;
-    font-size: 50px;
-    background: rgba(255,255,255,0.2);
-}
-
-.cross {
-    color: var(--player-color);
-}
-
-.nought {
-    color: var(--computer-color);
 }

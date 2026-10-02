@@ -1,13 +1,13 @@
-﻿using Database.Entities;
+using Database.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Database;
 
 public class TicTacToeDbContext(DbContextOptions<TicTacToeDbContext> options) : DbContext(options)
 {
-    public DbSet<GameEntity> Games { get; set; }
-    public DbSet<MarkEntity> Marks { get; set; }
-    public DbSet<OutboxEventEntity> Outbox { get; set; }
+    public DbSet<GameEntity> Games => Set<GameEntity>();
+    public DbSet<MarkEntity> Marks => Set<MarkEntity>();
+    public DbSet<OutboxEventEntity> Outbox => Set<OutboxEventEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -19,7 +19,11 @@ public class TicTacToeDbContext(DbContextOptions<TicTacToeDbContext> options) : 
 
         modelBuilder
             .Entity<MarkEntity>()
-            .HasKey(entity => new { entity.GameId, entity.Cell });
+            .HasKey(entity => new
+            {
+                entity.GameId,
+                entity.Cell
+            });
 
         modelBuilder
             .Entity<MarkEntity>()
@@ -29,6 +33,9 @@ public class TicTacToeDbContext(DbContextOptions<TicTacToeDbContext> options) : 
 
         modelBuilder
             .Entity<OutboxEventEntity>()
-            .HasKey(entity => new { entity.EventId });
+            .HasKey(entity => new
+            {
+                entity.EventId
+            });
     }
 }

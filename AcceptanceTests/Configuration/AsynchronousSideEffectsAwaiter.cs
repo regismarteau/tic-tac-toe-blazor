@@ -1,4 +1,4 @@
-﻿using AcceptanceTests.Extensions;
+using AcceptanceTests.Extensions;
 using Infrastructure.OutboxServices;
 using Reqnroll;
 

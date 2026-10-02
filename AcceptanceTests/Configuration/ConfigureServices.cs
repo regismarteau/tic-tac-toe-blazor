@@ -1,4 +1,4 @@
-﻿using AcceptanceTests.ErrorHandling;
+using AcceptanceTests.ErrorHandling;
 using Database;
 using Database.Migrations;
 using Microsoft.EntityFrameworkCore;
@@ -11,14 +11,11 @@ namespace AcceptanceTests.Configuration;
 
 public static class ConfigureServices
 {
-    public static IServiceCollection SubstituteServices(this IServiceCollection services, ScenarioContext context)
-    {
-        return services
-            .AddScoped<AsynchronousSideEffectsAwaiter>()
-            .AddSingleton(context)
-            .SubstituteDatabase()
-            .AddMediator(o => o.AddMiddlewares(typeof(AcceptanceErrorHandling<>), typeof(AcceptanceErrorHandling<,>)));
-    }
+    public static IServiceCollection SubstituteServices(this IServiceCollection services, ScenarioContext context) => services
+        .AddScoped<AsynchronousSideEffectsAwaiter>()
+        .AddSingleton(context)
+        .SubstituteDatabase()
+        .AddMediator(o => o.AddMiddlewares(typeof(AcceptanceErrorHandling<>), typeof(AcceptanceErrorHandling<,>)));
 
     private static IServiceCollection SubstituteDatabase(this IServiceCollection services)
     {
@@ -28,7 +25,7 @@ public static class ConfigureServices
             .AddSingleton(_ =>
             {
                 var substitute = Substitute.For<IMigrateDatabase>();
-                substitute.Migrate().ReturnsForAnyArgs(Task.CompletedTask);
+                substitute.Migrate(default).ReturnsForAnyArgs(Task.CompletedTask);
                 return substitute;
             });
     }

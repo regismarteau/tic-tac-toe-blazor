@@ -1,7 +1,7 @@
-﻿using AcceptanceTests.AssertionModels;
+using AcceptanceTests.AssertionModels;
 using AcceptanceTests.Extensions;
 using Bunit;
-using Domain.ValueObjects;
+using Domain.Gameplay;
 using FluentAssertions;
 using Queries;
 using Reqnroll;
@@ -14,10 +14,7 @@ public partial class GameSteps(ScenarioContext context) : BaseSteps(context)
 {
     [Given("a game started")]
     [When("I start a new game")]
-    public async Task WhenIStartANewGame()
-    {
-        await Page.FindByDataTest("start-button").ClickAsync();
-    }
+    public async Task WhenIStartANewGame() => await Page.FindByDataTest("start-button").ClickAsync();
 
     [When("^I play on (.+?) cell$")]
     public async Task WhenIPlayOnTopLeftCell(Cell cell)
@@ -27,10 +24,7 @@ public partial class GameSteps(ScenarioContext context) : BaseSteps(context)
     }
 
     [When("I retry a new game")]
-    public async Task WhenIRetryANewGame()
-    {
-        await Page.FindByDataTest("retry-button").ClickAsync();
-    }
+    public async Task WhenIRetryANewGame() => await Page.FindByDataTest("retry-button").ClickAsync();
 
     [Then("the game looks like")]
     public void ThenTheGameLooksLike(DataTable table)
@@ -55,17 +49,14 @@ public partial class GameSteps(ScenarioContext context) : BaseSteps(context)
         Page.FindByDataTest("you-loose-modal").Should().NotBeNull();
     }
 
-    private static List<MarkAssertion> ToMarks(DataTable table)
-    {
-        return [.. table.Header
-            .Concat(table.Rows.SelectMany(row => row.Values))
-            .Select((cellContent, index) => new { CellContent = cellContent, Index = index })
-            .Select(cell => new MarkAssertion(
-                Cell: (CellDto)cell.Index,
-                Symbol: string.IsNullOrWhiteSpace(cell.CellContent) ?
-                    null :
-                    cell.CellContent.Equals("x", StringComparison.InvariantCultureIgnoreCase) ?
-                        SymbolDto.Cross :
-                        SymbolDto.Nought))];
-    }
+    private static List<MarkAssertion> ToMarks(DataTable table) => [.. table.Header
+        .Concat(table.Rows.SelectMany(row => row.Values))
+        .Select((cellContent, index) => new { CellContent = cellContent, Index = index })
+        .Select(cell => new MarkAssertion(
+            Cell: (CellDto)cell.Index,
+            Symbol: string.IsNullOrWhiteSpace(cell.CellContent) ?
+                null :
+                cell.CellContent.Equals("x", StringComparison.InvariantCultureIgnoreCase) ?
+                    SymbolDto.Cross :
+                    SymbolDto.Nought))];
 }

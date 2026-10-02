@@ -1,4 +1,4 @@
-﻿using Bunit;
+using Bunit;
 using Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Reqnroll;

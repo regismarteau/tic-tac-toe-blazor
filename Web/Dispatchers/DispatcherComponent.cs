@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using RMediator.Abstractions;
 using Web.Extensions;
 
@@ -28,10 +28,7 @@ public class DispatcherComponent : ComponentBase, IDisposable
     protected Task<TResponse> Dispatch<TResponse>(ICommand<TResponse> command) => CommandDispatcher.Dispatch(command);
     protected Task<TResponse> Dispatch<TResponse>(IQuery<TResponse> query) => QueryDispatcher.Dispatch(query);
 
-    protected async Task StateHasChangedAsync()
-    {
-        await InvokeAsync(StateHasChanged);
-    }
+    protected async Task StateHasChangedAsync() => await InvokeAsync(StateHasChanged);
 
     protected virtual void Dispose(bool disposing)
     {

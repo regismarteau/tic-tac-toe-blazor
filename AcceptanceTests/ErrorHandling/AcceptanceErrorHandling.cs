@@ -1,45 +1,44 @@
-﻿using Reqnroll;
+using Reqnroll;
 using RMediator.Abstractions;
 
-namespace AcceptanceTests.ErrorHandling
+namespace AcceptanceTests.ErrorHandling;
+
+public class AcceptanceErrorHandling<TRequest, TResponse>(ScenarioContext context) : IHandleMiddleware<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {
-    public class AcceptanceErrorHandling<TRequest, TResponse>(ScenarioContext context) : IHandleMiddleware<TRequest, TResponse> where TRequest : IRequest<TResponse>
+    public async Task<TResponse> Handle(TRequest request, NextMiddleware<TResponse> next, CancellationToken cancellationToken)
     {
-        public async Task<TResponse> Handle(TRequest request, NextMiddleware<TResponse> next, CancellationToken cancellationToken)
+        try
         {
-            try
+            return await next(request, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            if (!context.IsAnErrorHandlingScenario())
             {
-                return await next(request, cancellationToken);
+                throw;
             }
-            catch (Exception ex)
-            {
-                if (!context.IsAnErrorHandlingScenario())
-                {
-                    throw;
-                }
-                context.Set(new AcceptanceError(ex));
-                return default!;
-            }
+            context.Set(new AcceptanceError(ex));
+            return default!;
         }
     }
+}
 
-    public class AcceptanceErrorHandling<TRequest>(ScenarioContext context) : IHandleMiddleware<TRequest> where TRequest : IRequest
+public class AcceptanceErrorHandling<TRequest>(ScenarioContext context) : IHandleMiddleware<TRequest> where TRequest : IRequest
+{
+    public async Task Handle(TRequest request, NextMiddleware next, CancellationToken cancellationToken)
     {
-        public async Task Handle(TRequest request, NextMiddleware next, CancellationToken cancellationToken)
+        try
         {
-            try
+            await next(request, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            if (!context.IsAnErrorHandlingScenario())
             {
-                await next(request, cancellationToken);
+                throw;
             }
-            catch (Exception ex)
-            {
-                if (!context.IsAnErrorHandlingScenario())
-                {
-                    throw;
-                }
 
-                context.Set(new AcceptanceError(ex));
-            }
+            context.Set(new AcceptanceError(ex));
         }
     }
 }

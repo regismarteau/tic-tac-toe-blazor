@@ -1,4 +1,4 @@
-﻿namespace Database.Entities;
+namespace Database.Entities;
 
 public class GameEntity
 {
@@ -12,5 +12,5 @@ public enum ResultValue
     Undetermined = 0,
     WonByPlayerX = 1,
     WonByPlayerO = 2,
-    Draw = 3,
+    Draw = 3
 }

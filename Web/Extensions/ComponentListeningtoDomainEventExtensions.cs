@@ -1,4 +1,3 @@
-﻿using RMediator.Abstractions;
 using Web.Dispatchers;
 
 namespace Web.Extensions;

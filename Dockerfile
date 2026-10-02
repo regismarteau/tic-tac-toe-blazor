@@ -7,4 +7,5 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /App
 COPY --from=build /App/out .
 ENV ConnectionStrings__Database=DataSource=file:memdb?mode=memory&cache=shared
+USER $APP_UID
 ENTRYPOINT ["dotnet", "Web.dll"]

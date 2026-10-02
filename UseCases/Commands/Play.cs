@@ -1,6 +1,6 @@
-﻿using Domain;
+using Domain;
+using Domain.Gameplay;
 using Domain.UnbeatableComputer;
-using Domain.ValueObjects;
 using RMediator.Abstractions;
 using UseCases.Ports;
 
@@ -12,8 +12,8 @@ public class PlayCommandHandler(IFindGame finder, IStoreGame store) : IHandleCom
 {
     public async Task Handle(Play command, CancellationToken cancellationToken)
     {
-        var game = await finder.Get(command.Id);
+        var game = await finder.Get(command.Id, cancellationToken);
         var events = game.Play(UserVersusComputer.User, command.Cell);
-        await store.Store(events);
+        await store.Store(events, cancellationToken);
     }
 }

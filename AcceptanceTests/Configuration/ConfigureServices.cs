@@ -11,14 +11,11 @@ namespace AcceptanceTests.Configuration;
 
 public static class ConfigureServices
 {
-    public static IServiceCollection SubstituteServices(this IServiceCollection services, ScenarioContext context)
-    {
-        return services
-            .AddScoped<AsynchronousSideEffectsAwaiter>()
-            .AddSingleton(context)
-            .SubstituteDatabase()
-            .AddMediator(o => o.AddMiddlewares(typeof(AcceptanceErrorHandling<>), typeof(AcceptanceErrorHandling<,>)));
-    }
+    public static IServiceCollection SubstituteServices(this IServiceCollection services, ScenarioContext context) => services
+        .AddScoped<AsynchronousSideEffectsAwaiter>()
+        .AddSingleton(context)
+        .SubstituteDatabase()
+        .AddMediator(o => o.AddMiddlewares(typeof(AcceptanceErrorHandling<>), typeof(AcceptanceErrorHandling<,>)));
 
     private static IServiceCollection SubstituteDatabase(this IServiceCollection services)
     {

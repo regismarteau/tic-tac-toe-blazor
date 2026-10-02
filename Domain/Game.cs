@@ -1,6 +1,5 @@
 using Domain.DomainEvents;
 using Domain.Gameplay;
-using Domain.ValueObjects;
 
 namespace Domain;
 
@@ -15,15 +14,9 @@ public class Game
     public GameId Id { get; }
     public TicTacToe TicTacToe { get; }
 
-    public static Game Rehydrate(GameId id, IReadOnlyCollection<Mark> marks)
-    {
-        return new(id, TicTacToe.From(marks));
-    }
+    public static Game Rehydrate(GameId id, IReadOnlyCollection<Mark> marks) => new(id, TicTacToe.From(marks));
 
-    public static GameStarted Start()
-    {
-        return new GameStarted(GameId.New());
-    }
+    public static GameStarted Start() => new(GameId.New());
 
     public Events Play(Player player, Cell cell)
     {

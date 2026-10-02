@@ -5,7 +5,6 @@ using Database.Extensions;
 using Domain;
 using Domain.DomainEvents;
 using Domain.Gameplay;
-using Domain.ValueObjects;
 using Infrastructure.OutboxServices;
 using Microsoft.EntityFrameworkCore;
 using RMediator.Abstractions;
@@ -43,26 +42,20 @@ public class GameRepository(TicTacToeDbContext dbContext) : IFindGame, IStoreGam
         }
     }
 
-    private Task Handle(IDomainEvent @event)
+    private Task Handle(IDomainEvent @event) => @event switch
     {
-        return @event switch
-        {
-            GameStarted started => Handle(started),
-            CellMarked marked => Handle(marked),
-            GameWon won => Handle(won),
-            GameResultedAsADraw draw => Handle(draw),
-            _ => Task.CompletedTask,
-        };
-    }
+        GameStarted started => Handle(started),
+        CellMarked marked => Handle(marked),
+        GameWon won => Handle(won),
+        GameResultedAsADraw draw => Handle(draw),
+        _ => Task.CompletedTask,
+    };
 
-    private async Task Handle(GameStarted started)
+    private async Task Handle(GameStarted started) => await dbContext.Games.AddAsync(new GameEntity
     {
-        await dbContext.Games.AddAsync(new GameEntity
-        {
-            Id = started.Id.Value,
-            Result = ResultValue.Undetermined
-        });
-    }
+        Id = started.Id.Value,
+        Result = ResultValue.Undetermined
+    });
 
     private async Task Handle(GameWon won)
     {
@@ -76,18 +69,12 @@ public class GameRepository(TicTacToeDbContext dbContext) : IFindGame, IStoreGam
         game.Result = ResultValue.Draw;
     }
 
-    private async Task Handle(CellMarked marked)
+    private async Task Handle(CellMarked marked) => await dbContext.AddAsync(new MarkEntity
     {
-        await dbContext.AddAsync(new MarkEntity
-        {
-            GameId = marked.GameId.Value,
-            Player = marked.Player == Player.X ? PlayerValue.X : PlayerValue.O,
-            Cell = marked.Cell.Map()
-        });
-    }
+        GameId = marked.GameId.Value,
+        Player = marked.Player == Player.X ? PlayerValue.X : PlayerValue.O,
+        Cell = marked.Cell.Map()
+    });
 
-    private async Task<GameEntity> GetEntity(GameId id)
-    {
-        return await dbContext.Games.ById(id.Value).SingleAsync();
-    }
+    private async Task<GameEntity> GetEntity(GameId id) => await dbContext.Games.ById(id.Value).SingleAsync();
 }

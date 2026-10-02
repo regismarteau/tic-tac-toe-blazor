@@ -24,9 +24,9 @@ public class DispatcherComponent : ComponentBase, IDisposable
     [Inject]
     private DomainEventComponentListeners Listeners { get; set; } = default!;
 
-    protected Task Dispatch(ICommand command) => CommandDispatcher.Dispatch(command);
-    protected Task<TResponse> Dispatch<TResponse>(ICommand<TResponse> command) => CommandDispatcher.Dispatch(command);
-    protected Task<TResponse> Dispatch<TResponse>(IQuery<TResponse> query) => QueryDispatcher.Dispatch(query);
+    protected Task Dispatch(ICommand command, CancellationToken cancellationToken = default) => CommandDispatcher.Dispatch(command, cancellationToken);
+    protected Task<TResponse> Dispatch<TResponse>(ICommand<TResponse> command, CancellationToken cancellationToken = default) => CommandDispatcher.Dispatch(command, cancellationToken);
+    protected Task<TResponse> Dispatch<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken = default) => QueryDispatcher.Dispatch(query, cancellationToken);
 
     protected async Task StateHasChangedAsync() => await InvokeAsync(StateHasChanged);
 

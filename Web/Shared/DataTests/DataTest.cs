@@ -1,4 +1,4 @@
-﻿namespace Web.Shared.DataTests;
+namespace Web.Shared.DataTests;
 
 public record DataTest(string Key, object? Value = null)
 {

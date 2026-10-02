@@ -1,5 +1,5 @@
 @using Web.Shared.DataTests
-<MudDialog Visible="true"
+<MudDialog Visible="Visible"
            Options="Options"
            Class="surface-glass">
   <TitleContent>
@@ -24,6 +24,9 @@
 
   [Parameter] [EditorRequired]
   public string Title { get; set; } = default!;
+
+  [Parameter]
+  public bool Visible { get; set; }
 
   [Parameter]
   public RenderFragment ChildContent { get; set; } = default!;

@@ -27,6 +27,12 @@ public class GameSteps(ScenarioContext context) : BaseSteps(context)
     [When("I retry a new game")]
     public async Task WhenIRetryANewGame() => await Page.FindByDataTest(TicTacToeDataTests.RetryButton).ClickAsync();
 
+    [Then("the lost game modal is closed")]
+    public void ThenTheLostGameModalIsClosed() => Page.WaitForNoElement(TicTacToeDataTests.YouLooseModal);
+
+    [Then("the drawn game modal is closed")]
+    public void ThenTheDrawnGameModalIsClosed() => Page.WaitForNoElement(TicTacToeDataTests.DrawModal);
+
     [Then("the game looks like")]
     public void ThenTheGameLooksLike(DataTable table)
     {

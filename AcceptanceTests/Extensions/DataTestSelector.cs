@@ -1,4 +1,4 @@
-﻿using Web.Shared.DataTests;
+using Web.Shared.DataTests;
 
 namespace AcceptanceTests.Extensions;
 

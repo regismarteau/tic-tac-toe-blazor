@@ -1,4 +1,4 @@
-﻿namespace Web.Shared.DataTests;
+namespace Web.Shared.DataTests;
 
 public static class TicTacToeDataTests
 {

@@ -1,8 +1,13 @@
 @using Queries
-<div class="cell" data-test="@($"cell-{Cell}")" @onclick="Select">
-    <MudPaper Elevation="0" Square="true" Class="@($"surface-subtle {SymbolClass}")">
-        @(Symbol is null ? Empty : Symbol is SymbolDto.Cross ? Cross : Nought)
-    </MudPaper>
+<div class="cell">
+    <MudButton Variant="Variant.Text"
+               Class="@($"surface-subtle {SymbolClass}")"
+               data-test="@($"cell-{Cell}")"
+               aria-label="@Label"
+               aria-disabled="@(Symbol is not null ? "true" : null)"
+               OnClick="Select">
+        <span aria-hidden="true">@(Symbol is null ? Empty : Symbol is SymbolDto.Cross ? Cross : Nought)</span>
+    </MudButton>
 </div>
 
 @code {
@@ -14,6 +19,8 @@
     public EventCallback<CellDto> Selected { get; set; }
 
     private string SymbolClass => Symbol is SymbolDto.Cross ? "text-player" : Symbol is SymbolDto.Nought ? "text-computer" : "";
+
+    private string Label => $"{Cell}: {(Symbol is null ? "empty" : Symbol is SymbolDto.Cross ? "cross" : "nought")}";
 
     private MarkupString Empty => ((MarkupString)"&nbsp;");
 

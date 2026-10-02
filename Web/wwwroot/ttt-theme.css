@@ -65,3 +65,8 @@ html, body {
 .fade-in { animation: fadeIn 1s ease-in-out; }
 .fade-in-up { animation: fadeInUp 1s ease-in-out; }
 .fade-in-up-large { animation: fadeInUpLarge 1s ease-in-out; }
+
+/* Fond d'overlay (MudDialog) laissant voir le contenu */
+.overlay-transparent .mud-overlay-scrim.mud-overlay-dark {
+    background: transparent;
+}

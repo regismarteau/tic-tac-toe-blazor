@@ -1,11 +1,28 @@
-<div class="modal-position fade-in-up" data-test="@DataTest">
-    <MudPaper Elevation="5" Class="surface-glass pa-5">
-        <MudStack Spacing="4" AlignItems="AlignItems.Center">
-            @ChildContent
-        </MudStack>
-    </MudPaper>
-</div>
+<MudDialog Visible="true"
+           Options="Options"
+           Class="surface-glass">
+    <TitleContent>
+        <MudText Typo="Typo.h4" HtmlTag="span">@Title</MudText>
+    </TitleContent>
+    <DialogContent>
+        <div data-test="@DataTest">
+            <MudStack Spacing="4" AlignItems="AlignItems.Center">
+                @ChildContent
+            </MudStack>
+        </div>
+    </DialogContent>
+</MudDialog>
 @code {
+    private static readonly DialogOptions Options = new()
+    {
+        BackdropClick = false,
+        CloseOnEscapeKey = false,
+        CloseButton = false,
+        BackgroundClass = "overlay-transparent",
+    };
+
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = default!;
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
     [Parameter]

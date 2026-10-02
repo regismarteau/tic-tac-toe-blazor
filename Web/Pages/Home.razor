@@ -7,6 +7,8 @@
 
 <PageTitle>Unbeatable Tic Tac Toe</PageTitle>
 
+<MudDialogProvider />
+
 @if (gameId is null)
 {
     <MudStack Class="fade-in-up-large" AlignItems="AlignItems.Center" Spacing="4">
@@ -20,14 +22,12 @@ else {
 
 @switch(lastGameResult){
     case ResultDto.Draw:
-        <Modal DataTest="draw-modal">
-            <MudText Typo="Typo.h4">Draw!</MudText>
+        <Modal DataTest="draw-modal" Title="Draw!">
             <MudButton Variant="Variant.Filled" Color="Color.Primary" data-test="retry-button" OnClick="StartNewGame">Retry</MudButton>
         </Modal>
         break;
     case ResultDto.WonByPlayerO :
-        <Modal DataTest="you-loose-modal">
-            <MudText Typo="Typo.h4">You loose!</MudText>
+        <Modal DataTest="you-loose-modal" Title="You loose!">
             <MudButton Variant="Variant.Filled" Color="Color.Primary" data-test="retry-button" OnClick="StartNewGame">Retry</MudButton>
         </Modal>
         break;

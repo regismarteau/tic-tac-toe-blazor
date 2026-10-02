@@ -1,14 +1,17 @@
 .cell {
     display: flex;
     margin: 0 0 1px 1px;
-    cursor: pointer;
+}
+
+.cell ::deep .mud-button-root {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    border-radius: 0;
     font-size: 50px;
     line-height: 0;
 }
 
-.cell ::deep .mud-paper {
-    display: flex;
-    flex: 1;
-    align-items: center;
-    justify-content: center;
+.cell ::deep .mud-button-root[aria-disabled="true"] {
+    cursor: default;
 }

@@ -1,4 +1,4 @@
-﻿using AcceptanceTests.AssertionModels;
+using AcceptanceTests.AssertionModels;
 using AcceptanceTests.Extensions;
 using Bunit;
 using Domain.ValueObjects;

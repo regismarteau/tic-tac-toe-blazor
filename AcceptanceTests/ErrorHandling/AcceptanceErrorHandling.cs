@@ -1,4 +1,4 @@
-﻿using Reqnroll;
+using Reqnroll;
 using RMediator.Abstractions;
 
 namespace AcceptanceTests.ErrorHandling

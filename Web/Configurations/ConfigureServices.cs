@@ -1,4 +1,4 @@
-﻿using RMediator.DependencyInjection;
+using RMediator.DependencyInjection;
 using Web.Dispatchers;
 
 namespace Web.Configurations;

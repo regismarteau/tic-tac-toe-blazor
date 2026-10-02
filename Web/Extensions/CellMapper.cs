@@ -1,4 +1,4 @@
-﻿using Domain.ValueObjects;
+using Domain.ValueObjects;
 using Queries;
 
 namespace Web.Extensions;

@@ -1,4 +1,4 @@
-﻿using AcceptanceTests.ErrorHandling;
+using AcceptanceTests.ErrorHandling;
 using Database;
 using Database.Migrations;
 using Microsoft.EntityFrameworkCore;

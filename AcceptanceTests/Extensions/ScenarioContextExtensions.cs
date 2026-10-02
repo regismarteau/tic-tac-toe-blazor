@@ -1,7 +1,6 @@
-﻿using AcceptanceTests.Configuration;
+using AcceptanceTests.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Reqnroll;
-using RMediator.Abstractions;
 
 namespace AcceptanceTests.Extensions
 {

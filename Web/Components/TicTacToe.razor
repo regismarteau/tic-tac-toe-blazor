@@ -36,13 +36,18 @@
         }
     }
 
-    public async Task Listen(CellMarked @event)
+    public async Task Listen(CellMarked @event, CancellationToken cancellationToken)
     {
-        currentGame = await Dispatch(new GetGameState(GameId));
-        await StateHasChangedAsync();
-        if(currentGame.Result is not ResultDto.Undetermined)
+        if (@event.GameId.Value != GameId)
         {
-            await GameCompleted.InvokeAsync(currentGame!.Result);            
+            return;
+        }
+
+        currentGame = await Dispatch(new GetGameState(GameId), cancellationToken);
+        await StateHasChangedAsync();
+        if (currentGame.Result is not ResultDto.Undetermined)
+        {
+            await GameCompleted.InvokeAsync(currentGame.Result);
         }
     }
 }

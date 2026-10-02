@@ -1,19 +1,17 @@
-.cell-container {
+.cell {
     display: flex;
-    cursor: pointer;
-    box-shadow: 0 0 0 1px var(--border-color);
     margin: 0 0 1px 1px;
-    align-items: center;
-    justify-content: center;
-    line-height: 0;
+}
+
+.cell ::deep .mud-button-root {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    border-radius: 0;
     font-size: 50px;
-    background: rgba(255,255,255,0.2);
+    line-height: 0;
 }
 
-.cross {
-    color: var(--player-color);
-}
-
-.nought {
-    color: var(--computer-color);
+.cell ::deep .mud-button-root[aria-disabled="true"] {
+    cursor: default;
 }

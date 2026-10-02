@@ -10,5 +10,5 @@ public class ScenarioInitializer
     public static void Init(ScenarioContext context) => context.Set(new TestServices(context));
 
     [AfterScenario]
-    public static void Clean(ScenarioContext context) => context.GetTestServices().Dispose();
+    public static async Task Clean(ScenarioContext context) => await context.GetTestServices().DisposeAsync();
 }

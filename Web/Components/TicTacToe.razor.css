@@ -1,7 +1,7 @@
-.tic-tac-toe-container {
+.board {
+    --board-size: min(75vh, 75vw, 500px);
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    width: min(75vh, 75vw, 500px);
-    height: min(75vh, 75vw, 500px);
+    grid-template-columns: repeat(3, 1fr);
+    width: var(--board-size);
+    height: var(--board-size);
 }
-

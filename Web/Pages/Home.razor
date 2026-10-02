@@ -23,27 +23,21 @@ else
   <TicTacToe GameId="gameId.Value" GameCompleted="DisplayResult"/>
 }
 
-@switch (lastGameResult)
-{
-  case ResultDto.Draw:
-    <Modal DataTest="TicTacToeDataTests.DrawModal" Title="Draw!">
-      <MudButton Variant="Variant.Filled" Color="Color.Primary" UserAttributes="TicTacToeDataTests.RetryButton"
-                 OnClick="StartNewGame">Retry
-      </MudButton>
-    </Modal>
-    break;
-  case ResultDto.WonByPlayerO:
-    <Modal DataTest="TicTacToeDataTests.YouLooseModal" Title="You loose!">
-      <MudButton Variant="Variant.Filled" Color="Color.Primary" UserAttributes="TicTacToeDataTests.RetryButton"
-                 OnClick="StartNewGame">Retry
-      </MudButton>
-    </Modal>
-    break;
-}
+<Modal Visible="isModalVisible" DataTest="modalDataTest" Title="@modalTitle">
+  <MudButton Variant="Variant.Filled" Color="Color.Primary" UserAttributes="TicTacToeDataTests.RetryButton"
+             OnClick="StartNewGame">Retry
+  </MudButton>
+</Modal>
 
 @code {
   private Guid? gameId { get; set; }
   private ResultDto? lastGameResult { get; set; }
+
+  private bool isModalVisible => lastGameResult is ResultDto.Draw or ResultDto.WonByPlayerO;
+  private string modalTitle => lastGameResult is ResultDto.Draw ? "Draw!" : "You loose!";
+  private DataTest modalDataTest => lastGameResult is ResultDto.Draw
+    ? TicTacToeDataTests.DrawModal
+    : TicTacToeDataTests.YouLooseModal;
 
   private async Task StartNewGame()
   {

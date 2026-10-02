@@ -6,7 +6,8 @@ Scenario: I can retry a new game if the computer wins
 	And I play on bottom right cell
 	And I play on top right cell
 	And I retry a new game
-	Then the game looks like
+	Then the lost game modal is closed
+	And the game looks like
 	|  |  |  |
 	|  |  |  |
 	|  |  |  |
@@ -19,7 +20,8 @@ Scenario: I can retry a new game if no one wins
 	And I play on top right cell
 	And I play on bottom right cell
 	And I retry a new game
-	Then the game looks like
+	Then the drawn game modal is closed
+	And the game looks like
 	|  |  |  |
 	|  |  |  |
 	|  |  |  |

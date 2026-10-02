@@ -1,51 +1,60 @@
 ﻿@page "/"
+@rendermode InteractiveServer
 @using Queries
 @using UseCases.Commands
-@using Web.Dispatchers
-@rendermode InteractiveServer
-@inherits DispatcherComponent
+@using Web.Shared.DataTests
+@inherits Web.Dispatchers.DispatcherComponent
 
 <PageTitle>Unbeatable Tic Tac Toe</PageTitle>
 
-<MudDialogProvider />
+<MudDialogProvider/>
 
 @if (gameId is null)
 {
-    <MudStack Class="fade-in-up-large" AlignItems="AlignItems.Center" Spacing="4">
-        <MudText Typo="Typo.h1" Align="Align.Center">Unbeatable Tic Tac Toe!</MudText>
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" data-test="start-button" OnClick="StartNewGame">Start!</MudButton>
-    </MudStack>
+  <MudStack Class="fade-in-up-large" AlignItems="AlignItems.Center" Spacing="4">
+    <MudText Typo="Typo.h1" Align="Align.Center">Unbeatable Tic Tac Toe!</MudText>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" UserAttributes="TicTacToeDataTests.StartButton"
+               OnClick="StartNewGame">Start!
+    </MudButton>
+  </MudStack>
 }
-else {
-    <TicTacToe GameId="gameId.Value" GameCompleted="DisplayResult" />
+else
+{
+  <TicTacToe GameId="gameId.Value" GameCompleted="DisplayResult"/>
 }
 
-@switch(lastGameResult){
-    case ResultDto.Draw:
-        <Modal DataTest="draw-modal" Title="Draw!">
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" data-test="retry-button" OnClick="StartNewGame">Retry</MudButton>
-        </Modal>
-        break;
-    case ResultDto.WonByPlayerO :
-        <Modal DataTest="you-loose-modal" Title="You loose!">
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" data-test="retry-button" OnClick="StartNewGame">Retry</MudButton>
-        </Modal>
-        break;
+@switch (lastGameResult)
+{
+  case ResultDto.Draw:
+    <Modal DataTest="TicTacToeDataTests.DrawModal" Title="Draw!">
+      <MudButton Variant="Variant.Filled" Color="Color.Primary" UserAttributes="TicTacToeDataTests.RetryButton"
+                 OnClick="StartNewGame">Retry
+      </MudButton>
+    </Modal>
+    break;
+  case ResultDto.WonByPlayerO:
+    <Modal DataTest="TicTacToeDataTests.YouLooseModal" Title="You loose!">
+      <MudButton Variant="Variant.Filled" Color="Color.Primary" UserAttributes="TicTacToeDataTests.RetryButton"
+                 OnClick="StartNewGame">Retry
+      </MudButton>
+    </Modal>
+    break;
 }
 
 @code {
-    private Guid? gameId { get; set; }
-    private ResultDto? lastGameResult { get; set; }
+  private Guid? gameId { get; set; }
+  private ResultDto? lastGameResult { get; set; }
 
-    private async Task StartNewGame() {
-        this.lastGameResult = null;
-        this.gameId = await Dispatch(new StartAGame());
-        await StateHasChangedAsync();
-    }
+  private async Task StartNewGame()
+  {
+    lastGameResult = null;
+    gameId = await Dispatch(new StartAGame());
+    await StateHasChangedAsync();
+  }
 
-    private async Task DisplayResult(ResultDto result)
-    {
-        lastGameResult = result;
-        await StateHasChangedAsync();
-    }
+  private async Task DisplayResult(ResultDto result)
+  {
+    lastGameResult = result;
+    await StateHasChangedAsync();
+  }
 }

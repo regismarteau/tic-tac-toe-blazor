@@ -10,6 +10,7 @@ public class TestServices : BunitContext
 {
     public TestServices(ScenarioContext context)
     {
+        JSInterop.Mode = JSRuntimeMode.Loose;
         Services
             .AddTicTacToeServices(new ConfigurationBuilder().Build())
             .AddWebServices()

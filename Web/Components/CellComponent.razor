@@ -1,38 +1,43 @@
 @using Queries
+@using Web.Shared.DataTests
 <div class="cell">
-    <MudButton Variant="Variant.Text"
-               Class="@($"surface-subtle {SymbolClass}")"
-               data-test="@($"cell-{Cell}")"
-               aria-label="@Label"
-               aria-disabled="@(Symbol is not null ? "true" : null)"
-               OnClick="Select">
-        <span aria-hidden="true">@(Symbol is null ? Empty : Symbol is SymbolDto.Cross ? Cross : Nought)</span>
-    </MudButton>
+  <MudButton Variant="Variant.Text"
+             Class="@($"surface-subtle {SymbolClass}")"
+             data-test="@TicTacToeDataTests.Cell"
+             data-test-value="@Cell.ToString()"
+             aria-label="@Label"
+             aria-disabled="@(Symbol is not null ? "true" : null)"
+             OnClick="Select">
+    <span aria-hidden="true">@(Symbol is null ? Empty : Symbol is SymbolDto.Cross ? Cross : Nought)</span>
+  </MudButton>
 </div>
 
 @code {
-    [Parameter]
-    public SymbolDto? Symbol { get; set; }
-    [Parameter, EditorRequired]
-    public CellDto Cell { get; set; }
-    [Parameter, EditorRequired] 
-    public EventCallback<CellDto> Selected { get; set; }
 
-    private string SymbolClass => Symbol is SymbolDto.Cross ? "text-player" : Symbol is SymbolDto.Nought ? "text-computer" : "";
+  [Parameter]
+  public SymbolDto? Symbol { get; set; }
 
-    private string Label => $"{Cell}: {(Symbol is null ? "empty" : Symbol is SymbolDto.Cross ? "cross" : "nought")}";
+  [Parameter] [EditorRequired]
+  public CellDto Cell { get; set; }
 
-    private MarkupString Empty => ((MarkupString)"&nbsp;");
+  [Parameter] [EditorRequired]
+  public EventCallback<CellDto> Selected { get; set; }
 
-    private MarkupString Cross => ((MarkupString)"&#128940;");
+  private string SymbolClass => Symbol is SymbolDto.Cross ? "text-player" : Symbol is SymbolDto.Nought ? "text-computer" : "";
 
-    private MarkupString Nought => ((MarkupString)"&#128902;");
+  private string Label => $"{Cell}: {(Symbol is null ? "empty" : Symbol is SymbolDto.Cross ? "cross" : "nought")}";
 
-    private async Task Select()
+  private static MarkupString Empty => (MarkupString)"&nbsp;";
+
+  private static MarkupString Cross => (MarkupString)"&#128940;";
+
+  private static MarkupString Nought => (MarkupString)"&#128902;";
+
+  private async Task Select()
+  {
+    if (Symbol is null)
     {
-        if(Symbol is null)
-        {
-            await Selected.InvokeAsync(this.Cell);
-        }
+      await Selected.InvokeAsync(Cell);
     }
+  }
 }

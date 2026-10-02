@@ -6,25 +6,26 @@ using FluentAssertions;
 using Queries;
 using Reqnroll;
 using Web.Components;
+using Web.Shared.DataTests;
 
 namespace AcceptanceTests.Steps;
 
 [Binding]
-public partial class GameSteps(ScenarioContext context) : BaseSteps(context)
+public class GameSteps(ScenarioContext context) : BaseSteps(context)
 {
     [Given("a game started")]
     [When("I start a new game")]
-    public async Task WhenIStartANewGame() => await Page.FindByDataTest("start-button").ClickAsync();
+    public async Task WhenIStartANewGame() => await Page.FindByDataTest(TicTacToeDataTests.StartButton).ClickAsync();
 
     [When("^I play on (.+?) cell$")]
-    public async Task WhenIPlayOnTopLeftCell(Cell cell)
+    public async Task WhenIPlayOnCell(Cell cell)
     {
-        await Page.FindByDataTest($"cell-{cell}").ClickAsync();
+        await Page.FindByDataTest(TicTacToeDataTests.Cell.For(cell)).ClickAsync();
         await Context.WaitForSideEffects();
     }
 
     [When("I retry a new game")]
-    public async Task WhenIRetryANewGame() => await Page.FindByDataTest("retry-button").ClickAsync();
+    public async Task WhenIRetryANewGame() => await Page.FindByDataTest(TicTacToeDataTests.RetryButton).ClickAsync();
 
     [Then("the game looks like")]
     public void ThenTheGameLooksLike(DataTable table)
@@ -39,24 +40,31 @@ public partial class GameSteps(ScenarioContext context) : BaseSteps(context)
     public void ThenTheGameEndsInADraw(DataTable table)
     {
         ThenTheGameLooksLike(table);
-        Page.FindByDataTest("draw-modal").Should().NotBeNull();
+        Page.FindByDataTest(TicTacToeDataTests.DrawModal).Should().NotBeNull();
     }
 
     [Then("^the game has been won by the computer$")]
-    public void ThenTheGameHasBeenWonBy(DataTable table)
+    public void ThenTheGameHasBeenWonByTheComputer(DataTable table)
     {
         ThenTheGameLooksLike(table);
-        Page.FindByDataTest("you-loose-modal").Should().NotBeNull();
+        Page.FindByDataTest(TicTacToeDataTests.YouLooseModal).Should().NotBeNull();
     }
 
-    private static List<MarkAssertion> ToMarks(DataTable table) => [.. table.Header
-        .Concat(table.Rows.SelectMany(row => row.Values))
-        .Select((cellContent, index) => new { CellContent = cellContent, Index = index })
-        .Select(cell => new MarkAssertion(
-            Cell: (CellDto)cell.Index,
-            Symbol: string.IsNullOrWhiteSpace(cell.CellContent) ?
-                null :
-                cell.CellContent.Equals("x", StringComparison.InvariantCultureIgnoreCase) ?
-                    SymbolDto.Cross :
-                    SymbolDto.Nought))];
+    private static List<MarkAssertion> ToMarks(DataTable table) =>
+    [
+        .. table.Header
+            .Concat(table.Rows.SelectMany(row => row.Values))
+            .Select((cellContent, index) => new
+            {
+                CellContent = cellContent,
+                Index = index
+            })
+            .Select(cell => new MarkAssertion(
+                (CellDto)cell.Index,
+                string.IsNullOrWhiteSpace(cell.CellContent) ?
+                    null :
+                    cell.CellContent.Equals("x", StringComparison.InvariantCultureIgnoreCase) ?
+                        SymbolDto.Cross :
+                        SymbolDto.Nought))
+    ];
 }

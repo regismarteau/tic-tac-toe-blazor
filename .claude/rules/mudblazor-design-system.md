@@ -1,0 +1,1 @@
+C:/Development/claude-config/rules/blazor/mudblazor-design-system.md

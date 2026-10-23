@@ -1,0 +1,1 @@
+C:/Development/claude-config/rules/common/bug-regression-test.md

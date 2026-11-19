@@ -30,6 +30,7 @@ Application Blazor sans API : le point d'entrée d'un scénario est une page ou 
 - Quand plusieurs éléments partagent le même rôle (cellules, lignes), l'identifiant reste unique et la variante passe dans un second attribut (ex. `data-test-value`, via `.For(valeur)`), jamais par concaténation.
 - Les steps agissent comme l'utilisateur (`ClickAsync` sur l'élément) et ne manipulent pas les paramètres ni l'état interne du composant, sauf pour vérifier un résultat qu'aucun élément n'affiche.
 - Un composant à cycle de vie propre (modale, popover, notification) a un scénario qui vérifie sa **fermeture** (le `data-test` de son contenu est absent du DOM), pas seulement son ouverture.
+- Les assertions passent par les concepts fonctionnels déjà en place (queries, pages, ce qui s'affiche), comme si l'utilisateur validait lui-même, et jamais par une lecture directe de la base quand c'est évitable. Ordre de préférence : 1) une query existante ou l'affichage ; 2) les fakes des dépendances externes (ex. paramètres reçus en entrée) ; 3) en dernier recours, une lecture de la base, à signaler dans la réponse en précisant pourquoi aucune autre voie n'était possible.
 - Un composant interactif a un rendu observable : si un scénario doit vérifier un état (cellule occupée, résultat, message), l'exposer dans le DOM (texte, `aria-label`, `data-test`) plutôt que d'interroger l'instance.
 
 ## Configuration de test

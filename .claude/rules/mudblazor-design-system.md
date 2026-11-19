@@ -30,6 +30,10 @@ Si le projet utilise MudBlazor, le rendu visuel est défini **une seule fois**, 
 - Les rôles métier pointent sur la palette : `--app-<rôle>-color: var(--mud-palette-info)` ; le thème fixe la valeur de `Info`. Les classes utilitaires (`.text-<rôle>`) lisent la variable de rôle.
 - Une surcharge globale cible la classe générique du composant (`.mud-button-filled`, `.mud-link`), pas une classe maison passée en `Class` à chaque usage. Choisir le sélecteur le plus étroit : `.mud-button-root` toucherait aussi `MudIconButton` et `MudFab`. Ces surcharges reposent sur l'ordre de chargement des feuilles (spécificité égale à celle de MudBlazor) : ne pas inverser l'ordre des `<link>`.
 - Classes de surface génériques (`.surface-glass`, `.surface-subtle`) : elles décrivent un rendu réutilisable, appliqué via `Class` sur un `MudPaper` ou un `MudDialog`, jamais lié à un composant précis.
+- Avant d'écrire du CSS, trancher s'il est **générique** ou **spécifique** :
+  - Spécifique (un usage précis, un seul composant) : dans le `.razor.css` de ce composant, jamais dans le CSS global.
+  - Générique (comportement réutilisable par d'autres composants) : dans le CSS global du design system, avec un nom de classe qui décrit le comportement ou le rendu (`.surface-glass`, `.text-truncate-2`), pas le composant qui l'utilise en premier (pas de `.user-card-title`).
+  - Si un style spécifique se retrouve dans un second composant, le promouvoir en classe générique.
 - Pas de couleur ou de police en dur dans un `.razor.css` : passer par une variable `--mud-*` ou de rôle.
 - Charger les polices que le thème déclare (`<link>` Google Fonts ou `@font-face`), sinon le navigateur retombe sur la police par défaut sans erreur.
 
